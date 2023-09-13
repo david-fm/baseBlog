@@ -1,0 +1,25 @@
+---
+import { getCollection } from 'astro:content';
+
+import Layout from '../layouts/Layout.astro';
+import Card from '../components/Card.astro';
+import Header from '../components/Header.astro';
+import Post from '../components/Post.astro';
+
+const blogPosts = await getCollection('blog')
+---
+
+<Layout title="Mavis">
+	<Header title='Mavis Blog'>
+	</Header>
+	<Card>
+		
+		<main class="w-full h-full">
+			<div class=" flex gap-5 flex-col">
+				{blogPosts.map(post => (
+					<Post post={post}></Post>
+				))}
+			</div>
+		</main>
+	</Card>
+</Layout>

@@ -1,0 +1,140 @@
+---
+
+title: Is Maradona comming back from its retirement?
+image: {
+    src: "https://picsum.photos/300/200",
+    alt: "Imagen de Maradona"
+}
+category: "Futbol"
+tags: [futbol, deportes]
+author: David Florez Mazuera
+publishDate: "2022-11-08 11:39"
+---
+## Part 3 - Views
+
+A view is a function that do one of two thinks:
+
+- Return an [`HttpResponse`](https://docs.djangoproject.com/en/4.1/ref/request-response/#django.http.HttpResponse) object
+- Raise an exception → Like [`Http404`](https://docs.djangoproject.com/en/4.1/topics/http/views/#django.http.Http404)
+
+
+Your view can do thinks such as:
+
+- read records from a database, or not
+- Use a template system such as Django’s third-party Python template system/ not use any templare
+- Generate a PDF file, output XML, create a ZIP file on the fly, anything you want, using whatever Python libraries you want.
+
+```
+from django.http import HttpResponse
+
+from .models import Question
+
+def index(request):
+    latest_question_list = Question.objects.order_by('-pub_date')[:5]
+    output = ', '.join([q.question_text for q in latest_question_list])
+    return HttpResponse(output)
+```
+
+## Templates
+
+Django has a templates API that can be used to generate html templates
+
+It is recommended with the default configuration(below) that templates for each app are saved as `app_name/template/app_name/template.html`, because this allows Djangos to identify between templates in different apps with the same name.
+
+```python
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+            ],
+        },
+    },
+]
+```
+
+### How to use templates
+
+Option A
+
+```python
+from django.http import HttpResponse
+from django.template import loader
+
+from .models import Question
+
+def index(request):
+    latest_question_list = Question.objects.order_by('-pub_date')[:5]
+    template = loader.get_template('polls/index.html')
+    context = {
+        'latest_question_list': latest_question_list,
+    }
+    return HttpResponse(template.render(context, request))
+```
+
+Option B
+
+```python
+from django.shortcuts import render
+
+from .models import Question
+
+def index(request):
+    latest_question_list = Question.objects.order_by('-pub_date')[:5]
+    context = {'latest_question_list': latest_question_list}
+    return render(request, 'polls/index.html', context)
+```
+
+### Links in templates
+
+Django gives us a way to put links on templates that leaves you the possibility to change urls directly from urls.py documents.
+
+```html
+<li><a href="{% url 'detail' question.id %}">{{ question.question_text }}</a></li>
+```
+
+```python
+...
+# the 'name' value as called by the {% url %} template tag
+path('<int:question_id>/', views.detail, name='detail'),
+...
+```
+
+## Raising errors
+
+General option
+
+```python
+from django.http import Http404
+from django.shortcuts import render
+
+from .models import Question
+# ...
+def detail(request, question_id):
+    try:
+        question = Question.objects.get(pk=question_id)
+    except Question.DoesNotExist:
+        raise Http404("Question does not exist")
+    return render(request, 'polls/detail.html', {'question': question})
+```
+
+Reduced option for get
+
+```python
+from django.shortcuts import get_object_or_404, render
+
+from .models import Question
+# ...
+def detail(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    return render(request, 'polls/detail.html', {'question': question})
+```
+
+- [More about how to customized and rise errors](https://docs.djangoproject.com/en/4.1/topics/http/views/#django.http.Http404)
+- If you want to filter you can use the function **`[get_list_or_404()](https://docs.djangoproject.com/en/4.1/topics/http/shortcuts/#django.shortcuts.get_list_or_404)`**
