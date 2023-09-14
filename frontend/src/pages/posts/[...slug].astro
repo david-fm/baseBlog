@@ -6,56 +6,56 @@ import Header from "../../components/Header.astro";
 import Card from "../../components/Card.astro";
 
 export async function getStaticPaths() {
-    const blogEntries = await getCollection("blog");
-    return blogEntries.map(entry => ({
-        params: {slug: entry.slug}, props: {entry},
-    }));
+  const blogEntries = await getCollection("blog");
+  return blogEntries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
 }
 
-const {entry} = Astro.props;
-const {Content} = await entry.render();
-
+const { entry } = Astro.props;
+const { Content } = await entry.render();
 ---
+
 <Layout title="Mavis">
-    <Header title='Mavis Blog'>
-	</Header>
-	<Card>
-		
-		<main class="w-full h-full">
-            <p class=" text-ucla-blue font-bold">{entry.data.category.toUpperCase()}</p>
-			<h1 class=" text-4xl lg:text-5xl text-erie-black font-bold ">{entry.data.title}</h1>
-            <div class="flex gap-2 mt-3 items-center flex-wrap md:flex-nowrap">
-                <span class="text-gray-400">
-                  {entry.data.author}
-                </span>
-                <span class="text-gray-400">•</span>
-                <time class="text-gray-400" datetime={entry.data.publishDate}>
-                  {getFormattedDate(entry.data.publishDate)}
-                </time>
-                <span class="text-gray-400 hidden md:block">•</span>
-                <div class="w-full md:w-auto flex flex-wrap gap-3">
-                  {
-                    entry.data.tags.map((tag) => (
-                      <span class="text-sm text-gray-500">#{tag}</span>
-                    ))
-                  }
-                </div>
-              </div>
-            <article class="prose lg:prose-xl text-erie-black prose-a:text-ucla-blue 
+  <Header title="Mavis Blog" />
+  <Card>
+    <main class="mx-auto max-w-3xl mt-14">
+      <p class="text-ucla-blue font-bold">
+        {entry.data.category.toUpperCase()}
+      </p>
+      <h1 class="text-4xl lg:text-5xl text-erie-black font-bold">
+        {entry.data.title}
+      </h1>
+      <div class="flex gap-2 mt-3 items-center flex-wrap md:flex-nowrap mb-4">
+        <span class="text-gray-400">
+          {entry.data.author}
+        </span>
+        <span class="text-gray-400">•</span>
+        <time class="text-gray-400" datetime={entry.data.publishDate}>
+          {getFormattedDate(entry.data.publishDate)}
+        </time>
+        <span class="text-gray-400 hidden md:block">•</span>
+        <div class="w-full md:w-auto flex flex-wrap gap-3">
+          {
+            entry.data.tags.map((tag: string) => (
+              <span class="text-sm text-gray-500">#{tag}</span>
+            ))
+          }
+        </div>
+      </div>
+      <article
+        class="prose lg:prose-xl text-erie-black prose-a:text-ucla-blue
                 prose-pre:bg-thistle prose-pre:text-erie-black prose-strong:text-coral
-                 prose-video:border-ucla-blue">
-                <Content />
-            </article>
-            
-		</main>
-	</Card>
-    
+                 prose-video:border-ucla-blue"
+      >
+        <Content />
+      </article>
+    </main>
+  </Card>
 </Layout>
 
 <style>
-
-main h2{
-
-}
-
+  main h2 {
+  }
 </style>
