@@ -11,9 +11,20 @@ const { post } = Astro.props;
 <a href={`/posts/${post.slug}`} class=" cursor-pointer ">
 <section class="grid gap-5 md:gap-10 md:grid-cols-2">
     <Image src={post.data.image.src} alt={post.data.image.alt} width="300" height="200" class=" w-full rounded-md"/>
-    <div class=" flex flex-col">
+    <div class=" flex flex-col justify-center">
         <post class=" text-ucla-blue font-bold">{post.data.category.toUpperCase()}</post>
         <h2 class=" text-3xl lg:text-4xl text-erie-black font-bold">{post.data.title}</h2>
+        <div class="flex gap-2 mt-3">
+            <span class="text-gray-400">
+              {post.data.author}
+            </span>
+            <span class="text-gray-400">• </span>
+            <time
+              class="text-gray-400"
+              datetime={post.data.publishDate.toISOString()}>
+              {post.data.publishDate.toDateString()}
+            </time>
+          </div>
     </div>
 </section>
 </a>
