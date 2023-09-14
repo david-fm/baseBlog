@@ -15,7 +15,7 @@ const blogPosts = await getCollection('blog')
 	<Card>
 		
 		<main class="w-full h-full">
-			<div class=" flex gap-5 flex-col">
+			<div class=" flex gap-16 flex-col max-w-4xl mx-auto">
 				{blogPosts.map(post => (
 					<Post post={post}></Post>
 				))}
