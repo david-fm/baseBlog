@@ -1,16 +1,17 @@
 
-import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
 import { useState } from "preact/hooks";
+import { Signal } from "@preact/signals";
 
 interface Props{
     children: any,
     post: CollectionEntry<'blog'>,
-    search?: any
+    search?: Signal<string>,
+    tagFilter?: Signal<string>
 }
 
 
-export default function Post({ children, post, search }: Props) {
+export default function Post({ children, post, search, tagFilter }: Props) {
     const [showPost, setShowContent] = useState(false);
 
     /* showPost == true if post contain search */
@@ -24,6 +25,14 @@ export default function Post({ children, post, search }: Props) {
         setShowContent(true);
     }
     
+    if (tagFilter?.value) {
+        if (post.data.tags.includes(tagFilter.value)) {
+            setShowContent(true);
+        } else {
+            setShowContent(false);
+        }
+    }
+
     return showPost &&(
         <a href={`/posts/${post.slug}`} class=" cursor-pointer ">
         <section class="grid gap-5 md:gap-10 md:grid-cols-2">

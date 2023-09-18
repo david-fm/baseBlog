@@ -8,13 +8,15 @@ import Header from '../components/Header.astro';
 import Post from '../components/Post.tsx';
 
 import Search from '../components/Search.jsx';
+import TagFilter from '../components/TagFilter.jsx';
 
 import { signal } from "@preact/signals"
 
 const search = signal('')
+const tagFilter = signal('')
 // Filter out content entries with `draft: true` only when building for production
 const blogPosts = signal(await getCollection('blog', ({ data }) => {
-  return !data.draft && data.title.includes(search.value) ;
+  return !data.draft ;
 }));
 
 
@@ -24,16 +26,24 @@ const blogPosts = signal(await getCollection('blog', ({ data }) => {
 <Layout title="Mavis">
 	<Header title='Mavis Blog'>
 	</Header>
-	<Card>
-		<Search search={search} client:visible/>
-		<main class="w-full h-full">
-			<div class=" flex gap-16 flex-col max-w-4xl mx-auto">
-				{blogPosts.value.map(post => (
-					<Post post={post} search={search} client:visible>
-						<Image src={post.data.image.src} alt={post.data.image.alt} width="300" height="200" class=" w-full rounded-md"/>
-					</Post>
-				))}
-			</div>
+	<Card >
+		
+		<main class="w-full h-full flex flex-col-reverse mt-10 md:flex-row">
+				<section class=" flex gap-16 flex-col max-w-4xl mx-auto">
+					{blogPosts.value.map(post => (
+						<Post post={post} search={search} tagFilter={tagFilter} client:visible>
+							<Image src={post.data.image.src} alt={post.data.image.alt} width="300" height="200" class=" w-full rounded-md"/>
+						</Post>
+					))}
+				</section>
+				<aside class="flex flex-wrap items-center justify-start h-min ">
+					<Search search={search} client:visible/>
+					<TagFilter 
+					  tags={blogPosts.value.map(post => post.data.tags).flat().filter((tag, index, self) => self.indexOf(tag) === index)}
+					  selected={tagFilter} 
+					  client:visible/>
+				</aside>
+			
 		</main>
 	</Card>
 </Layout>
