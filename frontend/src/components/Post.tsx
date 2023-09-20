@@ -26,7 +26,7 @@ export default function Post({ children, post, search, tagFilter }: Props) {
     }
     
     if (tagFilter?.value) {
-        if (post.data.tags.includes(tagFilter.value)) {
+        if (post.data.category === tagFilter.value) {
             setShowContent(true);
         } else {
             setShowContent(false);
