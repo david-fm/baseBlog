@@ -17,7 +17,7 @@ const { entry } = Astro.props;
 const { Content } = await entry.render();
 ---
 
-<Layout title="Computer.FM">
+<Layout title={entry.data.title}>
   <Header title="Computer.FM" />
   <Card>
     <main class="mx-auto max-w-3xl mt-14">
