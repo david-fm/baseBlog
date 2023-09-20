@@ -1,0 +1,156 @@
+---
+
+title: λ Lambda Calculus
+image: {
+    src: "https://www.ibm.com/content/dam/adobe-cms/instana/media_logo/AWS-Lambda.png/_jcr_content/renditions/cq5dam.web.1280.1280.png",
+    alt: "Lambda"
+}
+category: "Functional Programming"
+tags: [
+    "Lambda Calculus",
+    "Functional Programming",
+    "Computation",
+    "Formal Language",
+    "Mathematical Logic",
+    "Abstraction",
+    "Variable Binding",
+    "Church Encoding",
+    "Reduction",
+    "Turing Completeness",
+    "Functional Languages",
+    "Theoretical Computer Science",
+    "Computational Theory",
+    "Higher-Order Functions",
+    "Alonzo Church",
+    "Combinatory Logic",
+    "Type Systems",
+    "Formal Methods",
+    "Programming Paradigms",
+    "Computational Complexity"
+]
+
+author: David Florez Mazuera
+publishDate: "2023-09-20 22:00"
+draft: false
+---
+import Latex from "../../components/Latex.astro"
+
+## Why Lambda Calculus?
+Before delving into Lambda Calculus, let's first explore its benefits and the scenarios where it can prove valuable.
+
+Lambda Calculus is a neat and simple way to represent a Turing machine equivalent, so learning it will help you to understand computation in a more abstract way. It is also a good way to understand the basics of functional programming and how it works under the hood, making you more proficient when coding on languages where functional programming is available.
+
+Furthermore for those who are interested in develop a new programming language or a new type system, Lambda Calculus is a good starting point to test your ideas.
+
+Now you can start learning Lambda Calculus.
+
+## What is Lambda Calculus?
+
+> Lambda Calculus is a formal system in mathematical logic for expressing computation based on function abstraction and application using variable binding and [substitution](#substitution). 
+
+But what does that mean? Let's define some terms.
+
+## What is not Lambda Calculus?
+
+- Lambda Calculus does not have numbers, strings, booleans, etc.
+- Lambda Calculus does not have conditionals, loops, etc.
+- Lambda Calculus does not have predefined functions.
+
+## Definitions
+
+> **Formal system**: A formal system is a set of symbols, or tokens, and some inference rules that tell us how to manipulate the symbols.
+
+- <b>Symbols</b>: A symbol is a mark, sign, or word that indicates, signifies, or is understood as representing an idea, object, or relationship.
+- <b>Inference Rules</b>: An inference rule is a logical rule that is used to deduce one statement (called the conclusion) from one or more other statements (called the premises).
+
+> **Variable Binding**: In computer programming, variable binding is the association of a name to a value.
+>
+>   Example: `x = 5`
+
+> **Substitution**: A substitution instance of a formula or term is a formula or term constructed from it by replacing all variables with terms.
+
+## Syntax
+
+As long as we have a formal system, we need to define the syntax of the system. In other words, we need to define the symbols and the rules of the system.
+
+I will begin by defining the symbols of the system.
+
+### Symbols
+λx is equivalent to *function(x)*
+
+#### Alphabet
+
+- **variables**:  <Latex formula='a_0, a_1, ...'/>
+    - <b>free variables</b>: 
+    
+        <Latex formula='FV(x)=\{x\}'/> <br/>
+        <Latex formula='FV(M N)=FV(M)\cup FV(N)'/> <br/>
+        <Latex formula='FV(λx.M)=FV(M)−\{x\}'/> <br/>
+    - <b>bound variables</b>: 
+        
+            <Latex formula='BV(x)=\emptyset'/> <br/>
+            <Latex formula='BV(M N)=BV(M)\cup BV(N)'/> <br/>
+            <Latex formula='BV(λx.M)=BV(M)\cup\{x\}'/> <br/>
+
+- **improper symbols**: <Latex formula='λ, ., ( ), =, \rarr'/>
+- **equality**: <Latex formula='='/>
+- **redution**: <Latex formula='\rarr'/>
+
+#### Terms
+
+- **variable**: Any variable is a term.
+- **application**: <Latex formula='M N'/> where <Latex formula='M'/> and <Latex formula='N'/> are terms.
+- **abstraction**: <Latex formula='\lambda x . M'/> where <Latex formula='x'/> is a variable and <Latex formula='M'/> is a term.
+
+### Rules
+#### Formulas
+
+They are the
+
+Given that <Latex formula='M'/> and <Latex formula='N'/> are terms, then:
+
+- **equality**: <Latex formula='M = N'/>
+- **reduction**: <Latex formula='M \rarr N'/>
+
+#### Substitution
+
+As said in [definitions](#definitions), a substitution instance of a formula or term is a formula or term constructed from it by replacing all variables with terms. They are the building blocks of [reductions](#reductions).
+
+Given <Latex formula='(λy.M)[N/x]' /> with <Latex formula='x\ \bcancel{=} \ y'/>
+- if <Latex formula='y\not\in FV(N)'/> and <Latex formula='x\ \bcancel{\in} \ FV(M)'/>
+    - Then we can substitute <Latex formula='x'/> for <Latex formula='N'/> in <Latex formula='M'/> and get <Latex formula='M[N/x]'/>
+- in other case
+    - Select a new variable <Latex formula='z'/> such that <Latex formula='z\ \bcancel{\in} \ FV(M)\cup FV(N)'/>
+    - Apply the substitution <Latex formula='(λz.M[z/y])[N/x]'/>
+
+### Reductions
+
+They are the base rules of the λ calculus, there are three basic reductions:
+
+- **α-reduction**: <Latex formula='λx.M \rarr λy.M[y/x]'/> 
+
+    You can think of it as a variable renaming.
+
+- **β-reduction**: <Latex formula='(λx.M)N \rarr M[N/x]'/>
+
+    You can think of this as a function call.
+    ```python
+    def f(x):
+        return x + 1
+    
+    f(5) # 6
+    ```
+
+- **η-reduction**: <Latex formula='λx.Mx \rarr M'/> if <Latex formula='x\ \bcancel{\in} \ FV(M)'/>
+
+    You can think of this as the mathematical property:
+    <Latex formula='\forall x\  fx=gx'/> entonces <Latex formula='f=g'/>
+
+### Equality
+
+> It is said that two terms are equal if they can be reduced to the same term.
+
+- The result of equal terms is the same.
+
+<Latex formula='\lambda x.x = \lambda y.y'/> pero <Latex formula='\lambda x.x\ \bcancel{\equiv}\ \lambda y.y'/> 
+

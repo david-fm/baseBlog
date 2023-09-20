@@ -38,16 +38,16 @@ const { Content } = await entry.render();
         <span class="text-gray-400 hidden md:block">•</span>
         <div class="w-full md:w-auto flex flex-wrap gap-3">
           {
-            entry.data.tags.map((tag: string) => (
+            entry.data.tags.slice(0,5).map((tag: string) => (
               <span class="text-sm text-gray-500">#{tag}</span>
             ))
           }
         </div>
       </div>
       <article
-        class="prose-base lg:prose-xl text-erie-black text-justify prose-a:text-ucla-blue
+        class="prose-base lg:prose-xl text-erie-black prose-a:text-ucla-blue
                 prose-pre:bg-thistle prose-pre:text-erie-black prose-pre:overflow-scroll prose-strong:text-coral
-              prose-ul:list-disc marker:text-thistle"
+              prose-ul:list-disc marker:text-thistle prose-em:bg-slate-200 prose-em:p-1 prose-blockquote:bg-slate-100 prose-blockquote:rounded-md prose-blockquote:px-5 prose-blockquote:py-1"
       >
         <Content />
       </article>

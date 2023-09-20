@@ -1,0 +1,53 @@
+---
+
+title: Understanding Functional Programming
+image: {
+    src: "https://www.ibm.com/content/dam/adobe-cms/instana/media_logo/AWS-Lambda.png/_jcr_content/renditions/cq5dam.web.1280.1280.png",
+    alt: "Lambda"
+}
+category: "Functional Programming"
+tags: [functional-programming, lambda-calculus, python]
+author: David Florez Mazuera
+publishDate: "2023-09-19 22:00"
+draft: true
+---
+
+Before diggin into functional programming, we need to understand what is a lambda calculus, and what is a lambda function.
+
+## What is Lambda Calculus?
+
+> **Lambda calculus** is a formal system in mathematical logic for expressing computation based on function abstraction and application using variable binding and substitution.
+
+It is created on the base of the lambda function **λ** (lambda), which is equivalent to a function. Its syntax is the following:
+
+```python
+λx.x
+```
+
+Where **x** is the parameter of the function, and `.x` is the body of the function. The result of this function is the parameter itself. This is the equivalent of the following function in python:
+
+```python
+def identity(x):
+    return x
+```
+
+### Restrictions
+
+The lambda calculus has some restrictions, which are the following:
+- It only has one parameter.
+
+    If you need more than one parameter, you can use currying: *λx.λy.xy*.
+
+- It can't predefined constants (like 1, 2, 3, etc).
+- It can't have assignments (*x=z*). 
+- It can't have predefined functions (like *def sum(x, y): return x + y*).
+
+The definition (through functions) of all common constants and arithmetic and list manipulation functions (combinators) is allowed.
+
+
+## What is Functional Programming?
+
+> Functional programming takes its inspiration from lambda calculus. It is a programming paradigm that treats computation as the evaluation of mathematical functions and avoids changing-state and mutable data.
+
+
+## Benefits of Functional Programming
