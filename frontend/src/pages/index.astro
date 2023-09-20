@@ -39,7 +39,7 @@ const blogPosts = signal(await getCollection('blog', ({ data }) => {
 				<aside class="flex flex-wrap items-center justify-start h-min ">
 					<Search search={search} client:visible/>
 					<TagFilter 
-					  tags={blogPosts.value.map(post => post.data.tags).flat().filter((tag, index, self) => self.indexOf(tag) === index)}
+					  tags={blogPosts.value.map(post => post.data.category).flat().filter((tag, index, self) => self.indexOf(tag) === index)}
 					  selected={tagFilter} 
 					  client:visible/>
 				</aside>
