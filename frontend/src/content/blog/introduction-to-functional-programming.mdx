@@ -1,0 +1,148 @@
+---
+
+title: Introduction to Functional Programming
+image: {
+    src: "/images/FunctionalProgramming.jpg",
+    alt: "function of x between mathematics"
+}
+category: "Functional Programming"
+tags: [functional-programming, lambda-calculus, python]
+author: David Florez Mazuera
+publishDate: "2023-09-27 23:00"
+draft: false
+---
+import Latex from "../../components/Latex.astro"
+import Caption from "../../components/Caption.tsx"
+
+import tree from "../../images/FunctionalProgramming.png"
+import treeModifiedA from "../../images/tree-modified-changed.png"
+import treeModifiedB from "../../images/tree-modified-added.png"
+
+
+Before diggin into functional programming, I recommend understanding lambda calculus, because it is the basis of functional programming. You can find a brief introduction [here](/posts/lambda-calculo).
+
+
+## Why Functional Programming?
+
+Functional programming is a way of thinking about programming that commes  to solve problems from other paradigms such as:
+- functions which returns undeterming values because of variables or... 
+- variables shared between processes which varies their values or...
+- adds explainability, flexibility and reusability to your code.
+
+An example of the last point is the next situation. Imagine you want to create an alarm function that runs every day, the classic approach would be this:
+```` python
+import datetime
+
+def alarm():
+   print("This is an alarm")
+
+def alarmOnFriday():
+    while True:
+        now = datetime.datetime.now()
+        if now.hour == 8 and now.minute == 0:
+            if datetime.datetime.today().weekday() == 4:
+                alarm()
+            # Sleep for 60 seconds to prevent executing multiple times
+            time.sleep(60)
+    
+
+if __name__ == "__main__":
+    alarmOnFriday()
+````
+
+In contrast what functional programming proposes is this:
+```` python
+import datetime
+
+def alarm():
+   print("This is an alarm")
+
+def onlyOnFriday(f):
+    if datetime.datetime.today().weekday() == 4:
+        f()
+
+def executeEveryDay(f):
+    ''' This function will execute the function f every day at 8:00 AM '''
+    while True:
+        now = datetime.datetime.now()
+        if now.hour == 8 and now.minute == 0:
+            f()
+            # Sleep for 60 seconds to prevent executing multiple times
+            time.sleep(60)
+
+if __name__ == "__main__":
+    executeEveryDay(onlyOnFriday(alarm))
+````
+
+If you notice there is a big difference, now you can reuse each of the functions in the future, the code is way more explainable and above this, if any change is needed in any part of the logic it can be done quickly.
+
+
+## Understanding Functional Programming
+
+
+> **Definition**: It is a programming paradigm that treats computation as the evaluation of mathematical functions and avoids changing-state and mutable data.
+
+All in all we can think about it as our previous concept of programming plus the next main concepts:
+
+- functions (from the perspective of mathematics)
+- persistent data structures
+- atoms and queues
+
+### Functions
+
+In mathematics a function from a set <i>X</i> to a set <i>Y</i> assigns to each element of <i>X</i> exactly one element of <i>Y</i>.
+
+> <Latex formula='f:X\rightarrow Y'/> <br/>
+
+In simple words we can think of mathematical functions as our programatic functions given that:
+- <i>X</i> is the input of the function
+- <i>Y</i> is the output of the function, seen as the returning values and the resulting actions to its environment (as console logs)
+
+Given this definition functions should return always the same no matter what, but with our current  knowledge of computer science we there are situations where X can be mutated in the middle of the execution of <i>f</i> making its <i>Y</i> result vary.
+
+To solve this we will use inmutable variables, so every time we want to modify an array we will make a copy of itself... Now, pretty, but what about memory? We will have thousands of copies in memory of the same element? The answer is <b>NO</b> and our lifeline is **Persistent Data Structures**.
+
+### Persistent Data Structures
+
+> Persistent data structures are data structures that always preserves the previous version of itself when they are modified.
+
+A possible solution to the problem of persistent data structures is to create a tree with the next characteristics:
+- Its nodes are arrays of pointers
+- Its leafes are blocks of the complex structure
+
+In such a way when modifying an element or adding one most of the structure is reused.
+
+Here there is an example:
+
+<Caption url={tree.src} alt="Tree structure unmodified">Tree structure unmodified</Caption>
+
+
+<Caption url={treeModifiedA.src} alt="Tree structure modified with changed node">Tree structure modified with changed node</Caption>
+The red blocks are the unique ones we are modifying
+
+<Caption url={treeModifiedB.src} alt="Tree structure modified with added node">Tree structure modified with added node</Caption>
+
+Probably you will have realize that this perspective only works with complex data structures such as lists, but, what about variables, for them we will use our last backbone **atoms**.
+
+## Atoms and Queues
+
+> An atom is a container for a mutable state. 
+
+It can be considered as our known variables but with the difference that they only way to change its value is by applying a function to the old value.
+
+In reality what is being done is that when this function is thrown to the variable the system tries to execute it but if in the middle of the process a conflict with another thread is detected the function is executed again, till there are no conflicts.
+
+The last problem to solve is, how can I mutate the outside world? (databases, files, ...). The answer is with queues in which you send the function you want to apply and the system modify the outside world as is done with atoms.
+
+
+---
+
+References
+
+https://en.wikipedia.org/wiki/Function_(mathematics)
+
+https://youtu.be/0if71HOyVjY?feature=shared
+
+https://clojure.org/reference/atoms
+
+https://www.geeksforgeeks.org/persistent-data-structures/
